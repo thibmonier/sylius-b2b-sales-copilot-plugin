@@ -8,9 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class RecognizedRequestTest extends WebTestCase
 {
+    use LogsInShopUserTrait;
+
     public function testRecognizedRequestReturnsRecordedResponseInLessThanOneSecond(): void
     {
         $client = static::createClient();
+        $this->logInNewShopUser($client);
 
         // Test scénario: demande "état de mon panier" enregistrée dans cassettes.jsonl
         $startTime = microtime(true);

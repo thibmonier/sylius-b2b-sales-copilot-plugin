@@ -3,4 +3,4 @@ imports:
     - { resource: "services.php" }
 
 tmonier_sylius_b2b_sales_copilot:
-    enabled_channels: ['WEB']
+    enabled_channels: ['FASHION_WEB']

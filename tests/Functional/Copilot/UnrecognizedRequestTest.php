@@ -8,9 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class UnrecognizedRequestTest extends WebTestCase
 {
+    use LogsInShopUserTrait;
+
     public function testUnrecognizedRequestReturnsFallbackMessage(): void
     {
         $client = static::createClient();
+        $this->logInNewShopUser($client);
 
         // Demande non enregistrée dans les cassettes
         $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
@@ -32,6 +35,7 @@ final class UnrecognizedRequestTest extends WebTestCase
     public function testUnrecognizedRequestDoesNotMakeExternalApiCall(): void
     {
         $client = static::createClient();
+        $this->logInNewShopUser($client);
 
         // Demande non enregistrée - doit retourner le message de repli sans appel externe
         $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([

@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class ExpiredSessionTest extends WebTestCase
 {
+    use LogsInShopUserTrait;
+
     public function testUnauthenticatedRequestRedirectsOrForbidden(): void
     {
         $client = static::createClient();
@@ -56,6 +58,7 @@ final class ExpiredSessionTest extends WebTestCase
     public function testInvalidJsonReturns400(): void
     {
         $client = static::createClient();
+        $this->logInNewShopUser($client);
 
         // Send invalid JSON
         $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], 'invalid json{]');
