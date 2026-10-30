@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Tmonier\SyliusB2bSalesCopilotPlugin\Controller\CopilotChatController;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\Replay\ReplayCopilotAdapter;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\CopilotModelInterface;
 
@@ -22,4 +23,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias(CopilotModelInterface::class, ReplayCopilotAdapter::class)
         ->public();
+
+    $services->set(CopilotChatController::class)
+        ->public()
+        ->tag('controller.service_arguments');
 };

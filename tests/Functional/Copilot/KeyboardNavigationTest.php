@@ -15,6 +15,7 @@ final class KeyboardNavigationTest extends WebTestCase
 
     protected function setUp(): void
     {
+        static::createClient();
         $container = static::getContainer();
         $entityManager = $container->get('doctrine.orm.entity_manager');
         assert($entityManager instanceof EntityManagerInterface);
