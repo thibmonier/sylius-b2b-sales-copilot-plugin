@@ -7,15 +7,18 @@ namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Functional\Copilot;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\Customer;
 use Sylius\Component\Core\Model\ShopUser;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class KeyboardNavigationTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
     private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
-        static::createClient();
+        $this->client = static::createClient();
         $container = static::getContainer();
         $entityManager = $container->get('doctrine.orm.entity_manager');
         assert($entityManager instanceof EntityManagerInterface);
@@ -24,8 +27,6 @@ final class KeyboardNavigationTest extends WebTestCase
 
     public function testWidgetIsAccessibleByKeyboard(): void
     {
-        $client = static::createClient();
-
         // Create and login a ShopUser
         $customer = new Customer();
         $customer->setEmail('test_' . uniqid() . '@example.com');
@@ -42,15 +43,15 @@ final class KeyboardNavigationTest extends WebTestCase
         $this->entityManager->persist($shopUser);
         $this->entityManager->flush();
 
-        $client->loginUser($shopUser, 'shop');
+        $this->client->loginUser($shopUser, 'shop');
 
         // Navigate to account dashboard
-        $client->request('GET', '/en_US/account/dashboard');
+        $this->client->request('GET', '/en_US/account/dashboard');
 
         $this->assertResponseIsSuccessful();
 
         // Check that the widget has accessible attributes
-        $crawler = $client->getCrawler();
+        $crawler = $this->client->getCrawler();
 
         // Widget should have role="region"
         $widget = $crawler->filter('[data-controller="tmonier-copilot"]');
