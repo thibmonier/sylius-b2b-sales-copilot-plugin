@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Integration\Infrastructure\Replay;
+namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Unit\Infrastructure\Replay;
 
 use PHPUnit\Framework\TestCase;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\Replay\ReplayCopilotAdapter;
