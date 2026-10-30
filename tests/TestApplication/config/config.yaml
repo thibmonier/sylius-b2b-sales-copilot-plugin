@@ -1,0 +1,6 @@
+imports:
+    - { resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/config.yaml" }
+    - { resource: "services.php" }
+
+tmonier_sylius_b2b_sales_copilot:
+    enabled_channels: ['FASHION_WEB']

@@ -4,7 +4,6 @@ parameters:
     paths:
         - src
         - tests/Functional
-        - tests/Unit
         - tests/Integration
 
     excludePaths:

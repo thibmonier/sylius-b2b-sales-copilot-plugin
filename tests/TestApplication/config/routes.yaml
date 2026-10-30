@@ -1,0 +1,3 @@
+# Plugin routes only (TestApplication loads Sylius routes automatically)
+tmonier_b2b_sales_copilot:
+    resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/routes.yaml"

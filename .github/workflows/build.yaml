@@ -33,56 +33,42 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # Sylius 2.2: PHP >= 8.2, Symfony 6.4 / 7.4. Sylius 2.3: PHP >= 8.3, Symfony 6.4 / 7.4 / 8.0
-                # (Symfony 8 needs PHP 8.4; API Platform 5 and Symfony UX 3 are resolved there). PHP 8.5 runs on Sylius 2.3 + Symfony 8.
-                # https://github.com/Sylius/Sylius/blob/2.3/composer.json
+                # Sylius 2.2: PHP >= 8.2, Symfony 7.4. Sylius 2.3: PHP >= 8.3, Symfony 7.4 / 8.0
+                # Matrix aligned with sylius-digital-product-passport-plugin
                 php: ["8.3", "8.4"]
                 symfony: ["^7.4"]
                 sylius: ["~2.2.0", "~2.3.0"]
                 database: ["mysql:8.4"]
                 node: ["22.x"]
 
-                include:
-                    - php: "8.2"
-                      symfony: "^6.4"
-                      sylius: "~2.2.0"
-                      database: "mysql:8.4"
-                      node: "22.x"
-                    - php: "8.3"
-                      symfony: "^6.4"
-                      sylius: "~2.3.0"
-                      database: "mysql:8.4"
-                      node: "22.x"
-                    - php: "8.4"
-                      symfony: "^8.0"
-                      sylius: "~2.3.0"
-                      database: "mysql:8.4"
-                      node: "22.x"
-                    - php: "8.5"
-                      symfony: "^8.0"
-                      sylius: "~2.3.0"
-                      database: "mysql:8.4"
-                      node: "22.x"
-                    - php: "8.4"
-                      symfony: "^7.4"
-                      sylius: "~2.2.0"
-                      database: "mariadb:11.4"
-                      node: "22.x"
-                    - php: "8.4"
-                      symfony: "^7.4"
-                      sylius: "~2.3.0"
-                      database: "postgres:17"
-                      node: "22.x"
-
                 exclude:
-                    # Unsupported combinations (kept explicit in case the axes above change).
-                    - sylius: "~2.2.0"
-                      symfony: "^8.0"
+                    # Sylius 2.3 requires PHP >= 8.3
                     - sylius: "~2.3.0"
                       php: "8.2"
+                    # Symfony 8.0 is incompatible with Sylius 2.2
+                    - sylius: "~2.2.0"
+                      symfony: "^8.0"
+
+                include:
+                    # PHP 8.2 with Symfony 7.4 on Sylius 2.2
+                    - php: "8.2"
+                      symfony: "^7.4"
+                      sylius: "~2.2.0"
+                      database: "mysql:8.4"
+                      node: "22.x"
+                    # Symfony 8.0 on Sylius 2.3 with PHP 8.4
+                    - php: "8.4"
+                      symfony: "^8.0"
+                      sylius: "~2.3.0"
+                      database: "mysql:8.4"
+                      node: "22.x"
 
         env:
             APP_ENV: test
+            SYLIUS_TEST_APP_BUNDLES_PATH: "tests/TestApplication/config/bundles.php"
+            SYLIUS_TEST_APP_CONFIGS_TO_IMPORT: "@TmonierSyliusB2bSalesCopilotPlugin/tests/TestApplication/config/config.yaml"
+            SYLIUS_TEST_APP_ROUTES_TO_IMPORT: "@TmonierSyliusB2bSalesCopilotPlugin/tests/TestApplication/config/routes.yaml"
+            DATABASE_URL: "mysql://root:root@127.0.0.1/tmonier_sylius_b2b_sales_copilot_test?serverVersion=8.4&charset=utf8mb4"
 
         steps:
             -

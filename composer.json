@@ -16,8 +16,7 @@
     "require": {
         "php": "^8.2",
         "sylius/sylius": "^2.2.9 || ^2.3",
-        "symfony/clock": "^6.4 || ^7.4 || ^8.0",
-        "tmonier/sylius-b2b-mcp-plugin": "^1.1"
+        "symfony/clock": "^6.4 || ^7.4 || ^8.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.1",
