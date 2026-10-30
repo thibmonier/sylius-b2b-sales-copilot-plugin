@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Functional\Copilot;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Sylius\Component\Core\Model\Customer;
+use Sylius\Component\Core\Model\ShopUser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class KeyboardNavigationTest extends WebTestCase
@@ -14,16 +17,15 @@ final class KeyboardNavigationTest extends WebTestCase
 
         // Create and login a ShopUser
         $container = self::getContainer();
-        $shopUserFactory = $container->get('sylius.factory.shop_user');
-        $customerFactory = $container->get('sylius.factory.customer');
         $entityManager = $container->get('doctrine.orm.entity_manager');
+        assert($entityManager instanceof EntityManagerInterface);
 
-        $customer = $customerFactory->createNew();
+        $customer = new Customer();
         $customer->setEmail('test@example.com');
         $customer->setFirstName('Test');
         $customer->setLastName('User');
 
-        $shopUser = $shopUserFactory->createNew();
+        $shopUser = new ShopUser();
         $shopUser->setUsername('test@example.com');
         $shopUser->setPlainPassword('password123');
         $shopUser->setEnabled(true);
