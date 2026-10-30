@@ -2,26 +2,24 @@
 
 English | [Français](README.fr.md)
 
-AI-powered B2B purchasing assistant for Sylius 2: buyers formulate their purchase requests in natural language from their account, and the copilot prepares the cart from past orders and quotes.
+Conversational purchasing assistant skeleton for Sylius 2 B2B: a widget in the customer account sends requests to a copilot model behind a port (`CopilotModelInterface`). This version ships the **replay adapter** only: answers come from pre-recorded cassettes, with no call to an LLM API.
 
 **Demo**: [https://sylius-b2b.thibaut-monier.fr](https://sylius-b2b.thibaut-monier.fr)  
 **Author**: [Thibaut Monier](https://www.linkedin.com/in/thibautmonier/)
 
 ## Features
 
-- **Conversational widget** in the B2B customer account
-- **Natural language** purchase requests (reorder, quick add by SKU, quote request)
-- **Replay mode** for public demo (pre-recorded responses, no LLM API calls)
-- **Audit trail** of all copilot actions
-- **Scope-based permissions** (`b2b:read`, `b2b:cart`)
+- **Conversational widget** in the customer account dashboard (Stimulus, keyboard accessible, answers announced by a live region)
+- **Replay mode**: recorded requests return their recorded answer; any other request returns « scénario non enregistré en démo »
+- **Access guard**: the chat endpoint refuses anonymous visitors (401) and channels outside `enabled_channels` (403); the widget is only rendered on enabled channels
 
-Actions on the store through MCP tools are planned for a later version.
+Natural-language actions on the store (reorder, quick add, quotes) through MCP tools are planned for a later version.
 
 ## Requirements
 
 - PHP `^8.2`
 - Sylius `^2.2.9 || ^2.3`
-- Symfony `^6.4 || ^7.4 || ^8.0`
+- Symfony `^7.4 || ^8.0`
 
 ## Installation
 
@@ -38,17 +36,30 @@ return [
 ];
 ```
 
-Run migrations:
+Import the routes in `config/routes/tmonier_sylius_b2b_sales_copilot.yaml`:
 
-```bash
-php bin/console doctrine:migrations:migrate
+```yaml
+tmonier_sylius_b2b_sales_copilot:
+    resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/routes.yaml"
+```
+
+Register the widget controller in your shop assets entrypoint:
+
+```js
+import '@vendor/tmonier/sylius-b2b-sales-copilot-plugin/assets/shop/entrypoint';
 ```
 
 ## Configuration
 
-The plugin runs in **replay mode** by default (pre-recorded responses for demo purposes).
+List the channels where the copilot is available (B2B channels):
 
-Cassette file: `config/cassettes.jsonl` (JSONL format, one response per line).
+```yaml
+# config/packages/tmonier_sylius_b2b_sales_copilot.yaml
+tmonier_sylius_b2b_sales_copilot:
+    enabled_channels: ['B2B_WEB']
+```
+
+Recorded answers live in `config/cassettes.jsonl` (JSONL, one recorded request per line).
 
 ### Example cassette
 
@@ -58,12 +69,7 @@ Cassette file: `config/cassettes.jsonl` (JSONL format, one response per line).
 
 ## Usage
 
-Once installed, B2B customers see a copilot widget in their account dashboard. They can:
-
-- Ask for cart status
-- Reorder from past orders
-- Add products by SKU
-- Request quotes
+A signed-in customer on an enabled channel sees the copilot widget on the account dashboard and can send a request. A recorded request (for example « état de mon panier ») returns its recorded answer.
 
 ## Development
 
