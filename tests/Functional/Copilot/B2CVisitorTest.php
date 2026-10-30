@@ -75,6 +75,16 @@ final class B2CVisitorTest extends WebTestCase
         $b2cChannel->setEnabled(true);
         $b2cChannel->setBaseCurrency($defaultChannel->getBaseCurrency());
         $b2cChannel->setDefaultLocale($defaultChannel->getDefaultLocale());
+        $b2cChannel->setTaxCalculationStrategy($defaultChannel->getTaxCalculationStrategy());
+
+        foreach ($defaultChannel->getCurrencies() as $currency) {
+            $b2cChannel->addCurrency($currency);
+        }
+
+        foreach ($defaultChannel->getLocales() as $locale) {
+            $b2cChannel->addLocale($locale);
+        }
+
         $this->entityManager->persist($b2cChannel);
 
         // Create and authenticate a user
@@ -125,6 +135,16 @@ final class B2CVisitorTest extends WebTestCase
         $b2cChannel->setEnabled(true);
         $b2cChannel->setBaseCurrency($defaultChannel->getBaseCurrency());
         $b2cChannel->setDefaultLocale($defaultChannel->getDefaultLocale());
+        $b2cChannel->setTaxCalculationStrategy($defaultChannel->getTaxCalculationStrategy());
+
+        foreach ($defaultChannel->getCurrencies() as $currency) {
+            $b2cChannel->addCurrency($currency);
+        }
+
+        foreach ($defaultChannel->getLocales() as $locale) {
+            $b2cChannel->addLocale($locale);
+        }
+
         $this->entityManager->persist($b2cChannel);
 
         // Create and authenticate a user
