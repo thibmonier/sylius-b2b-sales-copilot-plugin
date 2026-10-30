@@ -21,6 +21,8 @@
 
 /.env.local
 /.env.*.local
+/tests/TestApplication/.env
+/tests/TestApplication/.env.test
 /tests/TestApplication/.env.local
 /tests/TestApplication/.env.*.local
 /tests/TestApplication/var/
