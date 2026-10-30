@@ -3,6 +3,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     paths:
         - src
+        - tests/Functional
         - tests/Integration
 
     excludePaths:
