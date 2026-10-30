@@ -1,8 +1,5 @@
 sylius_test_application:
     resource: "@SyliusTestApplication/Resources/config/routes.yaml"
 
-tmonier_b2b_mcp:
-    resource: "@TmonierSyliusB2bMcpPlugin/config/routes.yaml"
-
 tmonier_b2b_sales_copilot:
     resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/routes.yaml"

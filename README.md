@@ -12,16 +12,16 @@ AI-powered B2B purchasing assistant for Sylius 2: buyers formulate their purchas
 - **Conversational widget** in the B2B customer account
 - **Natural language** purchase requests (reorder, quick add by SKU, quote request)
 - **Replay mode** for public demo (pre-recorded responses, no LLM API calls)
-- **MCP tools integration** from `tmonier/sylius-b2b-mcp-plugin`
 - **Audit trail** of all copilot actions
 - **Scope-based permissions** (`b2b:read`, `b2b:cart`)
+
+Actions on the store through MCP tools are planned for a later version.
 
 ## Requirements
 
 - PHP `^8.2`
 - Sylius `^2.2.9 || ^2.3`
 - Symfony `^6.4 || ^7.4 || ^8.0`
-- `tmonier/sylius-b2b-mcp-plugin` `^1.1`
 
 ## Installation
 
@@ -34,7 +34,6 @@ Enable the bundle in `config/bundles.php`:
 ```php
 return [
     // ...
-    Tmonier\SyliusB2bMcpPlugin\TmonierSyliusB2bMcpPlugin::class => ['all' => true],
     Tmonier\SyliusB2bSalesCopilotPlugin\TmonierSyliusB2bSalesCopilotPlugin::class => ['all' => true],
 ];
 ```
@@ -65,8 +64,6 @@ Once installed, B2B customers see a copilot widget in their account dashboard. T
 - Reorder from past orders
 - Add products by SKU
 - Request quotes
-
-The copilot uses the MCP tools from `tmonier/sylius-b2b-mcp-plugin` to perform actions on behalf of the signed-in member.
 
 ## Development
 

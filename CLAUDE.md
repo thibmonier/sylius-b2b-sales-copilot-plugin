@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Sylius 2 plugin "B2B Sales Copilot": conversational purchasing assistant for B2B customers. Buyers formulate requests in natural language, the copilot prepares the cart using MCP tools from `tmonier/sylius-b2b-mcp-plugin`.
+Sylius 2 plugin "B2B Sales Copilot": conversational purchasing assistant for B2B customers. Buyers formulate requests in natural language from their account.
 
 **Demo mode (replay)**: pre-recorded responses from `config/cassettes.jsonl`, no LLM API calls.
 

@@ -12,16 +12,16 @@ Assistant d'achat conversationnel avec IA pour Sylius 2 B2B : les acheteurs form
 - **Widget conversationnel** dans l'espace client B2B
 - Demandes d'achat en **langage naturel** (recommander, ajout rapide par SKU, demande de devis)
 - **Mode rejoué** pour la démo publique (réponses enregistrées, aucun appel LLM payant)
-- **Intégration des outils MCP** depuis `tmonier/sylius-b2b-mcp-plugin`
 - **Traçabilité** de toutes les actions du copilote
 - **Permissions par scope** (`b2b:read`, `b2b:cart`)
+
+Les actions sur la boutique via des outils MCP sont prévues pour une version ultérieure.
 
 ## Prérequis
 
 - PHP `^8.2`
 - Sylius `^2.2.9 || ^2.3`
 - Symfony `^6.4 || ^7.4 || ^8.0`
-- `tmonier/sylius-b2b-mcp-plugin` `^1.1`
 
 ## Installation
 
@@ -34,7 +34,6 @@ Activez le bundle dans `config/bundles.php` :
 ```php
 return [
     // ...
-    Tmonier\SyliusB2bMcpPlugin\TmonierSyliusB2bMcpPlugin::class => ['all' => true],
     Tmonier\SyliusB2bSalesCopilotPlugin\TmonierSyliusB2bSalesCopilotPlugin::class => ['all' => true],
 ];
 ```
@@ -65,8 +64,6 @@ Une fois installé, les clients B2B voient un widget de copilote dans leur table
 - Recommander depuis des commandes passées
 - Ajouter des produits par SKU
 - Demander des devis
-
-Le copilote utilise les outils MCP de `tmonier/sylius-b2b-mcp-plugin` pour effectuer les actions au nom du membre connecté.
 
 ## Développement
 

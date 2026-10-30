@@ -34,7 +34,6 @@ jobs:
             fail-fast: false
             matrix:
                 # Sylius 2.2: PHP >= 8.2, Symfony 7.4. Sylius 2.3: PHP >= 8.3, Symfony 7.4 / 8.0
-                # The plugin depends on tmonier/sylius-b2b-mcp-plugin which requires symfony/clock ^7.4 || ^8.0
                 # Matrix aligned with sylius-digital-product-passport-plugin
                 php: ["8.3", "8.4"]
                 symfony: ["^7.4"]

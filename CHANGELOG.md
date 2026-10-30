@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Initial plugin skeleton
 - Replay adapter for demo mode (pre-recorded responses)
-- MCP tools integration from `tmonier/sylius-b2b-mcp-plugin`
 - Conversational widget in B2B customer account
 - Installation tests
 

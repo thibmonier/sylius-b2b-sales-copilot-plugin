@@ -1,4 +1,3 @@
 imports:
-    - { resource: "@TmonierSyliusB2bMcpPlugin/config/config.yaml" }
     - { resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/config.yaml" }
     - { resource: "services.php" }
