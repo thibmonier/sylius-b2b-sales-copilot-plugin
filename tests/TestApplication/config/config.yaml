@@ -1,5 +1,4 @@
 imports:
-    - { resource: "@FrameworkBundle/Resources/config/test.xml" }
-    - { resource: "@SyliusTestApplication/Resources/config/packages/_sylius.yaml" }
     - { resource: "@TmonierSyliusB2bMcpPlugin/config/config.yaml" }
     - { resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/config.yaml" }
+    - { resource: "services.php" }
