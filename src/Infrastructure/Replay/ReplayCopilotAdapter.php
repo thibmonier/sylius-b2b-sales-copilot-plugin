@@ -16,7 +16,7 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
 {
     private const FALLBACK_MESSAGE = 'Scénario non enregistré en démo. Veuillez réessayer avec une demande connue.';
 
-    /** @var array<string, array{intent: string, response: string, tools: array<int, array{name: string, args: array<string, mixed>, result: string}>}> */
+    /** @var array<string, array{intent: string, response: string, tools: list<ToolCall>}> */
     private array $cassettes = [];
 
     public function __construct(
@@ -34,12 +34,7 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
             return new CopilotResponse(self::FALLBACK_MESSAGE);
         }
 
-        $tools = array_map(
-            fn (array $tool): ToolCall => new ToolCall($tool['name'], $tool['args'], $tool['result']),
-            $cassette['tools'],
-        );
-
-        return new CopilotResponse($cassette['response'], $tools);
+        return new CopilotResponse($cassette['response'], $cassette['tools']);
     }
 
     private function loadCassettes(): void
@@ -59,8 +54,29 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
                 continue;
             }
 
+            if (!is_string($data['intent']) || !is_string($data['response']) || !is_array($data['tools'])) {
+                continue;
+            }
+
+            $tools = [];
+            foreach ($data['tools'] as $toolData) {
+                if (!is_array($toolData) || !isset($toolData['name'], $toolData['args'], $toolData['result'])) {
+                    continue;
+                }
+                if (!is_string($toolData['name']) || !is_array($toolData['args']) || !is_string($toolData['result'])) {
+                    continue;
+                }
+                /** @var array<string, mixed> $args */
+                $args = $toolData['args'];
+                $tools[] = new ToolCall($toolData['name'], $args, $toolData['result']);
+            }
+
             $key = $this->normalizeKey($data['intent']);
-            $this->cassettes[$key] = $data;
+            $this->cassettes[$key] = [
+                'intent' => $data['intent'],
+                'response' => $data['response'],
+                'tools' => $tools,
+            ];
         }
     }
 
