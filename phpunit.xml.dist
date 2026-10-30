@@ -10,10 +10,14 @@
     <php>
         <server name="KERNEL_CLASS" value="Sylius\TestApplication\Kernel" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true"/>
-        <server name="EXPECTED_RESPONSE_DIR" value="../Responses/Expected"/>
 
         <env name="APP_SECRET" value="''" />
         <env name="APP_ENV" value="test"/>
+
+        <server name="SYLIUS_TEST_APP_BUNDLES_PATH" value="tests/TestApplication/config/bundles.php"/>
+        <server name="SYLIUS_TEST_APP_CONFIGS_TO_IMPORT" value="@TmonierSyliusB2bSalesCopilotPlugin/tests/TestApplication/config/config.yaml"/>
+        <server name="SYLIUS_TEST_APP_ROUTES_TO_IMPORT" value="@TmonierSyliusB2bSalesCopilotPlugin/tests/TestApplication/config/routes.yaml"/>
+        <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1/tmonier_sylius_b2b_sales_copilot_%kernel.environment%"/>
     </php>
 
     <testsuites>
