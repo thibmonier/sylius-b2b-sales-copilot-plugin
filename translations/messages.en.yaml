@@ -1,0 +1,7 @@
+tmonier_sylius_b2b_sales_copilot:
+    ui:
+        sales_assistant: Sales Assistant
+        your_request: Your request
+        placeholder: Ask me about your cart, products...
+        send: Send
+        view_cart: View my cart

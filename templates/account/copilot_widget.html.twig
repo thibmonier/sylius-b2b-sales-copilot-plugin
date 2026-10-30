@@ -1,0 +1,51 @@
+<div
+    data-controller="tmonier--sylius-b2b-sales-copilot-plugin--copilot"
+    data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-api-url-value="/api/copilot/chat"
+    class="copilot-widget"
+    role="region"
+    aria-label="{{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}"
+>
+    <h3>{{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}</h3>
+
+    <div
+        data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="conversation"
+        aria-live="polite"
+        aria-atomic="false"
+        class="copilot-conversation"
+    >
+        {# Messages will be appended here by Stimulus #}
+    </div>
+
+    <form data-action="submit->tmonier--sylius-b2b-sales-copilot-plugin--copilot#sendMessage">
+        <div class="form-group">
+            <label for="copilot-input">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.your_request'|trans }}
+            </label>
+            <input
+                type="text"
+                id="copilot-input"
+                data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="input"
+                class="form-control"
+                placeholder="{{ 'tmonier_sylius_b2b_sales_copilot.ui.placeholder'|trans }}"
+                required
+            >
+        </div>
+        <button
+            type="submit"
+            class="btn btn-primary"
+            data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="submitButton"
+        >
+            {{ 'tmonier_sylius_b2b_sales_copilot.ui.send'|trans }}
+        </button>
+    </form>
+
+    <div
+        data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="cartButton"
+        class="copilot-cart-button"
+        style="display: none;"
+    >
+        <a href="{{ path('sylius_shop_cart_summary') }}" class="btn btn-success">
+            {{ 'tmonier_sylius_b2b_sales_copilot.ui.view_cart'|trans }}
+        </a>
+    </div>
+</div>

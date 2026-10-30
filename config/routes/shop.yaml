@@ -1,0 +1,4 @@
+tmonier_b2b_sales_copilot_chat:
+    path: /api/copilot/chat
+    methods: [POST]
+    controller: Tmonier\SyliusB2bSalesCopilotPlugin\Controller\CopilotChatController::chat

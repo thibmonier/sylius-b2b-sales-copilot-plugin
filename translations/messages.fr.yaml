@@ -1,0 +1,7 @@
+tmonier_sylius_b2b_sales_copilot:
+    ui:
+        sales_assistant: Assistant commercial
+        your_request: Votre demande
+        placeholder: Interrogez-moi sur votre panier, les produits...
+        send: Envoyer
+        view_cart: Voir mon panier
