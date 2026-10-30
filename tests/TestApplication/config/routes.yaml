@@ -1,11 +1,8 @@
-tmonier_sylius_company_accounts:
-    resource: "@TmonierSyliusCompanyAccountsPlugin/config/routes.yaml"
+sylius_test_application:
+    resource: "@SyliusTestApplication/Resources/config/routes.yaml"
 
-tmonier_sylius_purchase_approval:
-    resource: "@TmonierSyliusPurchaseApprovalPlugin/config/routes.yaml"
+tmonier_b2b_mcp:
+    resource: "@TmonierSyliusB2bMcpPlugin/config/routes.yaml"
 
-tmonier_sylius_trade_credit:
-    resource: "@TmonierSyliusTradeCreditPlugin/config/routes.yaml"
-
-tmonier_sylius_company_insights:
-    resource: "@TmonierSyliusCompanyInsightsPlugin/config/routes.yaml"
+tmonier_b2b_sales_copilot:
+    resource: "@TmonierSyliusB2bSalesCopilotPlugin/config/routes.yaml"
