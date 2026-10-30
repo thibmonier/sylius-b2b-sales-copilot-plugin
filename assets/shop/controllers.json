@@ -1,9 +1,4 @@
 {
-  "controllers": [
-    {
-      "name": "tmonier--sylius-b2b-sales-copilot-plugin--copilot",
-      "file": "./controllers/copilot_controller.js"
-    }
-  ],
+  "controllers": [],
   "entrypoints": []
 }
