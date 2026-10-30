@@ -52,4 +52,19 @@ final class ExpiredSessionTest extends WebTestCase
             $this->assertArrayNotHasKey('cart', $data);
         }
     }
+
+    public function testInvalidJsonReturns400(): void
+    {
+        $client = static::createClient();
+
+        // Send invalid JSON
+        $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], 'invalid json{]');
+
+        // Should return 400 Bad Request
+        $this->assertEquals(
+            400,
+            $client->getResponse()->getStatusCode(),
+            'Invalid JSON should return 400',
+        );
+    }
 }

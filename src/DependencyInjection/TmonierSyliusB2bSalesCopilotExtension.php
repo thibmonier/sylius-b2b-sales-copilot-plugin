@@ -18,6 +18,13 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
 
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $enabledChannels = $config['enabled_channels'] ?? [];
+        assert(is_array($enabledChannels));
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.enabled_channels', $enabledChannels);
+
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.php');
     }

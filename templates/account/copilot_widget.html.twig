@@ -1,3 +1,4 @@
+{% if is_copilot_enabled() %}
 <div
     data-controller="tmonier-copilot"
     data-tmonier-copilot-api-url-value="/api/copilot/chat"
@@ -49,3 +50,4 @@
         </a>
     </div>
 </div>
+{% endif %}
