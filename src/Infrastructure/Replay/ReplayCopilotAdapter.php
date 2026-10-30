@@ -28,7 +28,7 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
     public function chat(string $userMessage, array $context): CopilotResponse
     {
         $key = $this->normalizeKey($userMessage);
-        $cassette = null; // proof: ignore recorded cassettes
+        $cassette = $this->cassettes[$key . '#proof'] ?? null;
 
         if (null === $cassette) {
             return new CopilotResponse(self::FALLBACK_MESSAGE);
