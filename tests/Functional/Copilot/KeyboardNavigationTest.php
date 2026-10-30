@@ -21,20 +21,20 @@ final class KeyboardNavigationTest extends WebTestCase
         $crawler = $client->getCrawler();
 
         // Widget should have role="region"
-        $widget = $crawler->filter('[data-controller="tmonier--sylius-b2b-sales-copilot-plugin--copilot"]');
+        $widget = $crawler->filter('[data-controller="tmonier-copilot"]');
         $this->assertCount(1, $widget, 'Widget should be present');
         $this->assertEquals('region', $widget->attr('role'));
 
         // Input should be focusable
-        $input = $crawler->filter('[data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="input"]');
+        $input = $crawler->filter('[data-tmonier-copilot-target="input"]');
         $this->assertCount(1, $input, 'Input should be present');
 
         // Submit button should be focusable
-        $button = $crawler->filter('[data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="submitButton"]');
+        $button = $crawler->filter('[data-tmonier-copilot-target="submitButton"]');
         $this->assertCount(1, $button, 'Submit button should be present');
 
         // Conversation should have aria-live="polite"
-        $conversation = $crawler->filter('[data-tmonier--sylius-b2b-sales-copilot-plugin--copilot-target="conversation"]');
+        $conversation = $crawler->filter('[data-tmonier-copilot-target="conversation"]');
         $this->assertCount(1, $conversation, 'Conversation should be present');
         $this->assertEquals('polite', $conversation->attr('aria-live'));
     }
