@@ -21,13 +21,13 @@ final class ExpiredSessionTest extends WebTestCase
         $this->assertNotEquals(
             200,
             $client->getResponse()->getStatusCode(),
-            'Unauthenticated request should NOT return 200 (currently does, guard missing)'
+            'Unauthenticated request should NOT return 200 (currently does, guard missing)',
         );
 
         $this->assertContains(
             $client->getResponse()->getStatusCode(),
             [302, 401, 403],
-            'Unauthenticated request should be redirected or forbidden'
+            'Unauthenticated request should be redirected or forbidden',
         );
     }
 

@@ -28,7 +28,7 @@ final class B2CVisitorTest extends WebTestCase
         $this->assertNotEquals(
             200,
             $client->getResponse()->getStatusCode(),
-            'Unauthenticated request should NOT return 200 (currently does, guard missing)'
+            'Unauthenticated request should NOT return 200 (currently does, guard missing)',
         );
     }
 
