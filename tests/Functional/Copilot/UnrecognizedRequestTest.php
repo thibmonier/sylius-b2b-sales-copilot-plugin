@@ -13,7 +13,7 @@ final class UnrecognizedRequestTest extends WebTestCase
         $client = static::createClient();
 
         // Demande non enregistrée dans les cassettes
-        $client->request('POST', '/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+        $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'message' => 'une demande totalement inconnue qui n\'existe pas dans les cassettes',
         ], \JSON_THROW_ON_ERROR));
 
@@ -34,7 +34,7 @@ final class UnrecognizedRequestTest extends WebTestCase
         $client = static::createClient();
 
         // Demande non enregistrée - doit retourner le message de repli sans appel externe
-        $client->request('POST', '/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+        $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'message' => 'demande inconnue',
         ], \JSON_THROW_ON_ERROR));
 

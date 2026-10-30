@@ -12,6 +12,29 @@ final class KeyboardNavigationTest extends WebTestCase
     {
         $client = static::createClient();
 
+        // Create and login a ShopUser
+        $container = self::getContainer();
+        $shopUserFactory = $container->get('sylius.factory.shop_user');
+        $customerFactory = $container->get('sylius.factory.customer');
+        $entityManager = $container->get('doctrine.orm.entity_manager');
+
+        $customer = $customerFactory->createNew();
+        $customer->setEmail('test@example.com');
+        $customer->setFirstName('Test');
+        $customer->setLastName('User');
+
+        $shopUser = $shopUserFactory->createNew();
+        $shopUser->setUsername('test@example.com');
+        $shopUser->setPlainPassword('password123');
+        $shopUser->setEnabled(true);
+        $shopUser->setCustomer($customer);
+
+        $entityManager->persist($customer);
+        $entityManager->persist($shopUser);
+        $entityManager->flush();
+
+        $client->loginUser($shopUser, 'shop');
+
         // Navigate to account dashboard
         $client->request('GET', '/en_US/account/dashboard');
 

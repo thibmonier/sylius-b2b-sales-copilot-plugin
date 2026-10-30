@@ -15,7 +15,7 @@ final class RecognizedRequestTest extends WebTestCase
         // Test scénario: demande "état de mon panier" enregistrée dans cassettes.jsonl
         $startTime = microtime(true);
 
-        $client->request('POST', '/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+        $client->request('POST', '/en_US/api/copilot/chat', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'message' => 'état de mon panier',
         ], \JSON_THROW_ON_ERROR));
 
