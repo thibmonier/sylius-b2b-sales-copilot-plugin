@@ -11,29 +11,35 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class KeyboardNavigationTest extends WebTestCase
 {
+    private EntityManagerInterface $entityManager;
+
+    protected function setUp(): void
+    {
+        $container = static::getContainer();
+        $entityManager = $container->get('doctrine.orm.entity_manager');
+        assert($entityManager instanceof EntityManagerInterface);
+        $this->entityManager = $entityManager;
+    }
+
     public function testWidgetIsAccessibleByKeyboard(): void
     {
         $client = static::createClient();
 
         // Create and login a ShopUser
-        $container = self::getContainer();
-        $entityManager = $container->get('doctrine.orm.entity_manager');
-        assert($entityManager instanceof EntityManagerInterface);
-
         $customer = new Customer();
-        $customer->setEmail('test@example.com');
+        $customer->setEmail('test_' . uniqid() . '@example.com');
         $customer->setFirstName('Test');
         $customer->setLastName('User');
 
         $shopUser = new ShopUser();
-        $shopUser->setUsername('test@example.com');
+        $shopUser->setUsername('test_' . uniqid() . '@example.com');
         $shopUser->setPlainPassword('password123');
         $shopUser->setEnabled(true);
         $shopUser->setCustomer($customer);
 
-        $entityManager->persist($customer);
-        $entityManager->persist($shopUser);
-        $entityManager->flush();
+        $this->entityManager->persist($customer);
+        $this->entityManager->persist($shopUser);
+        $this->entityManager->flush();
 
         $client->loginUser($shopUser, 'shop');
 
