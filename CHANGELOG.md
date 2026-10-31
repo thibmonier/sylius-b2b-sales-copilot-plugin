@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-31
+
 ### Fixed
 - The widget posts to the chat route of the current locale: in 0.1.0 it posted to `/api/copilot/chat`, while the route is prefixed with `/{_locale}`, so every request from the widget answered 404
 
