@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Keyword matching: fuzzy fallback when exact intent and alias both miss (US-215)
 - Improved fallback message: lists available scenarios in the detected language (US-215)
 - Suggestion chips for add-by-reference and batch-add in widget translations (US-213)
+- Add-by-reference chip added to the widget template (US-213)
 
 ### Fixed
 - ECS style violations in `ReplayCopilotAdapter` (constant prefix, closure spacing)
