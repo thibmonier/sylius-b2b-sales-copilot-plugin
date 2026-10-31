@@ -17,3 +17,5 @@ tmonier_sylius_b2b_sales_copilot:
         suggestion_stock: quels produits en stock ?
         suggestion_reorder: recommande comme le mois dernier
         suggestion_reorder_sub: recommande avec substitution
+        suggestion_add_ref: ajoute la référence PB-GANT-NITR-09 au panier
+        suggestion_batch_add: ajoute 5 × PB-GANT-NITR-09 et 3 × EC-BOUCH-MOUS-50

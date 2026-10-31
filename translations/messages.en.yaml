@@ -17,3 +17,5 @@ tmonier_sylius_b2b_sales_copilot:
         suggestion_stock: which products are in stock?
         suggestion_reorder: reorder like last month
         suggestion_reorder_sub: reorder with substitution
+        suggestion_add_ref: add reference PB-GANT-NITR-09 to cart
+        suggestion_batch_add: add 5 × PB-GANT-NITR-09 and 3 × EC-BOUCH-MOUS-50

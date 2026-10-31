@@ -8,11 +8,12 @@ final class ToolCall
 {
     /**
      * @param array<string, mixed> $args
+     * @param string|array<string, mixed> $result
      */
     public function __construct(
         public readonly string $name,
         public readonly array $args,
-        public readonly string $result,
+        public readonly string|array $result,
     ) {
     }
 }
