@@ -64,7 +64,7 @@ Les réponses enregistrées sont dans `config/cassettes.jsonl` (JSONL, une deman
 ### Exemple de cassette
 
 ```jsonl
-{"version":"1.0","intent":"état de mon panier","normalized":{"action":"get_cart"},"timestamp":"2026-10-30T10:00:00Z","tools":[{"name":"get_checkout_link","args":{},"result":"success"}],"response":"Votre panier contient 3 articles pour un total de 150,00 €. Voulez-vous passer au checkout ?"}
+{"version":"1.0","intent":"état de mon panier","normalized":{"action":"get_cart"},"timestamp":"2026-10-31T10:00:00Z","tools":[{"name":"get_checkout_link","args":{},"result":"success"}],"response":"Votre panier contient 47 articles pour un total de 963,50 € HT. Voulez-vous passer au checkout ?"}
 ```
 
 ## Utilisation
