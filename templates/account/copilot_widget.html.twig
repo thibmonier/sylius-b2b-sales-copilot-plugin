@@ -1,7 +1,7 @@
 {% if is_copilot_enabled() %}
 <div
     data-controller="tmonier-copilot"
-    data-tmonier-copilot-api-url-value="/api/copilot/chat"
+    data-tmonier-copilot-api-url-value="{{ path('tmonier_b2b_sales_copilot_chat') }}"
     class="copilot-widget"
     role="region"
     aria-label="{{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}"

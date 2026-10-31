@@ -70,5 +70,8 @@ final class KeyboardNavigationTest extends WebTestCase
         $conversation = $crawler->filter('[data-tmonier-copilot-target="conversation"]');
         $this->assertCount(1, $conversation, 'Conversation should be present');
         $this->assertEquals('polite', $conversation->attr('aria-live'));
+
+        // The widget posts to the chat route of the current locale (the route is prefixed with /{_locale})
+        $this->assertSame('/en_US/api/copilot/chat', $widget->attr('data-tmonier-copilot-api-url-value'));
     }
 }
