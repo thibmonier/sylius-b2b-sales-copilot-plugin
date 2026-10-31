@@ -556,4 +556,72 @@ final class ReplayCopilotAdapterTest extends TestCase
         self::assertStringContainsString('INEXISTANT-999 not found', $response->message);
         self::assertEmpty($response->tools);
     }
+
+    public function testClosedCatalogFrReturnsErrorMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'version' => '1.0',
+            'intent' => 'ajoute PRODUIT-FERME-01 au panier',
+            'aliases' => [],
+            'response' => "Le produit PRODUIT-FERME-01 n'est pas disponible dans votre catalogue.",
+            'tools' => [],
+        ]) . "\n");
+
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+        $response = $adapter->chat('ajoute PRODUIT-FERME-01 au panier', []);
+
+        self::assertStringContainsString('pas disponible', $response->message);
+        self::assertEmpty($response->tools);
+    }
+
+    public function testClosedCatalogEnReturnsErrorMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'version' => '1.0',
+            'intent' => 'add CLOSED-PROD-01 to cart',
+            'aliases' => [],
+            'response' => 'Product CLOSED-PROD-01 is not available in your catalog.',
+            'tools' => [],
+        ]) . "\n");
+
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+        $response = $adapter->chat('add CLOSED-PROD-01 to cart', []);
+
+        self::assertStringContainsString('not available', $response->message);
+        self::assertEmpty($response->tools);
+    }
+
+    public function testInvalidQuantityFrReturnsErrorMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'version' => '1.0',
+            'intent' => 'ajoute -3 de PB-GANT-NITR-09 au panier',
+            'aliases' => [],
+            'response' => 'Quantité invalide (−3). Veuillez indiquer une quantité positive.',
+            'tools' => [],
+        ]) . "\n");
+
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+        $response = $adapter->chat('ajoute -3 de PB-GANT-NITR-09 au panier', []);
+
+        self::assertStringContainsString('invalide', $response->message);
+        self::assertEmpty($response->tools);
+    }
+
+    public function testInvalidQuantityEnReturnsErrorMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'version' => '1.0',
+            'intent' => 'add -3 of PB-GANT-NITR-09 to cart',
+            'aliases' => [],
+            'response' => 'Invalid quantity (−3). Please specify a positive quantity.',
+            'tools' => [],
+        ]) . "\n");
+
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+        $response = $adapter->chat('add -3 of PB-GANT-NITR-09 to cart', []);
+
+        self::assertStringContainsString('Invalid quantity', $response->message);
+        self::assertEmpty($response->tools);
+    }
 }

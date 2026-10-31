@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Functional\Copilot;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * T-TECH-39-01: the widget renders on the B2B dashboard with locale-prefixed URLs and no raw translation keys.

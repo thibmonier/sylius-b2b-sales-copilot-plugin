@@ -182,14 +182,14 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
             'and', 'or', 'is', 'are', 'can', 'you', 'what', 'how',
         ];
 
-        $words = preg_split('/\s+/', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+        $words = preg_split('/\s+/', $normalized, -1, \PREG_SPLIT_NO_EMPTY);
         if (false === $words) {
             return [];
         }
 
         return array_values(array_filter(
             $words,
-            fn(string $word) => !in_array($word, $stopWords, true) && mb_strlen($word) > 2
+            fn (string $word) => !in_array($word, $stopWords, true) && mb_strlen($word) > 2,
         ));
     }
 
@@ -204,28 +204,30 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
         }
 
         $scenarios = array_map(
-            fn(array $cassette) => $cassette['intent'],
-            $this->cassettesList
+            fn (array $cassette) => $cassette['intent'],
+            $this->cassettesList,
         );
 
         if ($isFrench) {
             $frenchScenarios = array_filter(
                 $scenarios,
-                fn(string $intent) => $this->detectLanguage($intent)
+                fn (string $intent) => $this->detectLanguage($intent),
             );
 
             if (!empty($frenchScenarios)) {
                 $list = implode("\n- ", $frenchScenarios);
+
                 return "Scénario non enregistré en démo.\n\nScénarios disponibles :\n- {$list}";
             }
         } else {
             $englishScenarios = array_filter(
                 $scenarios,
-                fn(string $intent) => !$this->detectLanguage($intent)
+                fn (string $intent) => !$this->detectLanguage($intent),
             );
 
             if (!empty($englishScenarios)) {
                 $list = implode("\n- ", $englishScenarios);
+
                 return "Scenario not recorded in demo.\n\nAvailable scenarios:\n- {$list}";
             }
         }
@@ -243,7 +245,7 @@ final class ReplayCopilotAdapter implements CopilotModelInterface
         $normalized = mb_strtolower($text);
 
         // Split into words
-        $words = preg_split('/\s+/', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+        $words = preg_split('/\s+/', $normalized, -1, \PREG_SPLIT_NO_EMPTY);
         if (false === $words) {
             return false;
         }

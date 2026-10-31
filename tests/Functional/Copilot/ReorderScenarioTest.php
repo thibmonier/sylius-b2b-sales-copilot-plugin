@@ -28,11 +28,14 @@ final class ReorderScenarioTest extends WebTestCase
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         self::assertIsArray($response);
         self::assertArrayHasKey('message', $response);
+        self::assertIsString($response['message']);
         self::assertStringContainsString('commande n° 42', $response['message']);
         self::assertArrayHasKey('tools', $response);
         self::assertIsArray($response['tools']);
         self::assertCount(2, $response['tools']);
+        self::assertIsArray($response['tools'][0]);
         self::assertSame('list_my_orders', $response['tools'][0]['name']);
+        self::assertIsArray($response['tools'][1]);
         self::assertSame('reorder', $response['tools'][1]['name']);
     }
 
@@ -54,6 +57,7 @@ final class ReorderScenarioTest extends WebTestCase
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         self::assertIsArray($response);
         self::assertArrayHasKey('message', $response);
+        self::assertIsString($response['message']);
         self::assertStringContainsString('order #42', $response['message']);
         self::assertArrayHasKey('tools', $response);
         self::assertIsArray($response['tools']);
@@ -78,10 +82,12 @@ final class ReorderScenarioTest extends WebTestCase
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         self::assertIsArray($response);
         self::assertArrayHasKey('message', $response);
+        self::assertIsString($response['message']);
         self::assertStringContainsString('substitution', $response['message']);
         self::assertArrayHasKey('tools', $response);
         self::assertIsArray($response['tools']);
         self::assertCount(2, $response['tools']);
+        self::assertIsArray($response['tools'][1]);
         self::assertSame('partial', $response['tools'][1]['result']);
     }
 
@@ -103,6 +109,7 @@ final class ReorderScenarioTest extends WebTestCase
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         self::assertIsArray($response);
         self::assertArrayHasKey('message', $response);
+        self::assertIsString($response['message']);
         self::assertStringContainsString('substitution', $response['message']);
         self::assertArrayHasKey('tools', $response);
         self::assertIsArray($response['tools']);
