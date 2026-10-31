@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-31
+
+### Added
+- Reorder scenarios: "reorder like last month" and "reorder with substitution" cassettes (FR/EN)
+- Scenario suggestion buttons (chips) in the widget for quick access to recorded responses
+- BEM class naming for the widget template (`.copilot-widget__*`)
+- Empty state message when the conversation starts
+- Fallback and error UI messages (title + body)
+
+### Changed
+- Widget template rewritten with BEM classes and `aria-live` region
+
 ## [0.1.1] - 2026-10-31
 
 ### Fixed
@@ -21,4 +33,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Access guard on the chat endpoint (anonymous visitors refused, `enabled_channels` option)
 - Fallback answer for requests absent from the cassettes
 
-[Unreleased]: https://github.com/thibmonier/sylius-b2b-sales-copilot-plugin/commits/main
+[Unreleased]: https://github.com/thibmonier/sylius-b2b-sales-copilot-plugin/compare/v1.1.0...main
+[1.1.0]: https://github.com/thibmonier/sylius-b2b-sales-copilot-plugin/compare/v0.1.1...v1.1.0
