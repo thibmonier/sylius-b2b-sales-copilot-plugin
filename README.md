@@ -71,6 +71,12 @@ Recorded answers live in `config/cassettes.jsonl` (JSONL, one recorded request p
 
 A signed-in customer on an enabled channel sees the copilot widget on the account dashboard and can send a request. A recorded request (for example « état de mon panier ») returns its recorded answer.
 
+The widget is hooked into `sylius_shop.account.dashboard.index.content.main.section`. A theme that replaces the dashboard can include it directly: `{% include '@TmonierSyliusB2bSalesCopilotPlugin/account/copilot_widget.html.twig' %}` (it renders nothing outside the enabled channels).
+
+## Screenshots
+
+![The widget on the account dashboard, after a recorded request](docs/images/shop-copilot-widget-en.jpg)
+
 ## Development
 
 ### Running tests
