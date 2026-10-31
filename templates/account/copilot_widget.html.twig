@@ -1,53 +1,103 @@
 {% if is_copilot_enabled() %}
-<div
+<section
     data-controller="tmonier-copilot"
     data-tmonier-copilot-api-url-value="{{ path('tmonier_b2b_sales_copilot_chat') }}"
     class="copilot-widget"
     role="region"
-    aria-label="{{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}"
+    aria-labelledby="copilot-widget-title"
 >
-    <h3>{{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}</h3>
-
-    <div
-        data-tmonier-copilot-target="conversation"
-        aria-live="polite"
-        aria-atomic="false"
-        class="copilot-conversation"
-    >
-        {# Messages will be appended here by Stimulus #}
+    <div class="copilot-widget__header">
+        <div class="copilot-widget__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3 6.5C3 4.015 5.015 2 7.5 2h3C12.985 2 15 4.015 15 6.5v2c0 2.485-2.015 4.5-4.5 4.5H10l-3 3v-3h-.5C4.015 13 3 10.985 3 8.5v-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                <circle cx="7" cy="7.5" r="1" fill="currentColor"/>
+                <circle cx="11" cy="7.5" r="1" fill="currentColor"/>
+            </svg>
+        </div>
+        <div class="copilot-widget__header-text">
+            <h3 id="copilot-widget-title" class="copilot-widget__title">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.sales_assistant'|trans }}
+            </h3>
+            <span class="copilot-widget__subtitle">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.demo_notice'|trans }}
+            </span>
+        </div>
     </div>
 
-    <form data-action="submit->tmonier-copilot#sendMessage">
-        <div class="form-group">
-            <label for="copilot-input">
+    <div class="copilot-widget__body">
+        <div
+            data-tmonier-copilot-target="conversation"
+            aria-live="polite"
+            aria-atomic="false"
+            class="copilot-widget__conversation"
+            role="log"
+        >
+            <div class="copilot-widget__empty" data-tmonier-copilot-target="emptyState">
+                <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+                    <rect x="4" y="8" width="32" height="22" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 16h16M12 22h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>{{ 'tmonier_sylius_b2b_sales_copilot.ui.empty_state'|trans }}</span>
+            </div>
+        </div>
+
+        <div class="copilot-widget__suggestions" data-tmonier-copilot-target="suggestions">
+            <button type="button" class="copilot-widget__chip" data-action="click->tmonier-copilot#sendSuggestion">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.suggestion_cart'|trans }}
+            </button>
+            <button type="button" class="copilot-widget__chip" data-action="click->tmonier-copilot#sendSuggestion">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.suggestion_reorder'|trans }}
+            </button>
+            <button type="button" class="copilot-widget__chip" data-action="click->tmonier-copilot#sendSuggestion">
+                {{ 'tmonier_sylius_b2b_sales_copilot.ui.suggestion_reorder_sub'|trans }}
+            </button>
+        </div>
+
+        <form data-action="submit->tmonier-copilot#sendMessage" class="copilot-widget__form">
+            <label for="copilot-input" class="visually-hidden">
                 {{ 'tmonier_sylius_b2b_sales_copilot.ui.your_request'|trans }}
             </label>
             <input
                 type="text"
                 id="copilot-input"
                 data-tmonier-copilot-target="input"
-                class="form-control"
+                class="copilot-widget__input"
                 placeholder="{{ 'tmonier_sylius_b2b_sales_copilot.ui.placeholder'|trans }}"
                 required
             >
-        </div>
-        <button
-            type="submit"
-            class="btn btn-primary"
-            data-tmonier-copilot-target="submitButton"
-        >
-            {{ 'tmonier_sylius_b2b_sales_copilot.ui.send'|trans }}
-        </button>
-    </form>
+            <button
+                type="submit"
+                class="copilot-widget__send"
+                data-tmonier-copilot-target="submitButton"
+                aria-label="{{ 'tmonier_sylius_b2b_sales_copilot.ui.send'|trans }}"
+            >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </form>
+
+        <p class="copilot-widget__notice">
+            {{ 'tmonier_sylius_b2b_sales_copilot.ui.demo_notice'|trans }}
+        </p>
+    </div>
 
     <div
         data-tmonier-copilot-target="cartButton"
-        class="copilot-cart-button"
+        class="copilot-widget__cart-action"
         style="display: none;"
     >
-        <a href="{{ path('sylius_shop_cart_summary') }}" class="btn btn-success">
+        <a href="{{ path('sylius_shop_cart_summary') }}" class="copilot-widget__cart-link">
             {{ 'tmonier_sylius_b2b_sales_copilot.ui.view_cart'|trans }}
         </a>
     </div>
-</div>
+
+    <template data-tmonier-copilot-target="loadingTemplate">
+        <div class="copilot-widget__loading" aria-label="{{ 'tmonier_sylius_b2b_sales_copilot.ui.loading'|trans }}">
+            <span class="copilot-widget__dot"></span>
+            <span class="copilot-widget__dot"></span>
+            <span class="copilot-widget__dot"></span>
+        </div>
+    </template>
+</section>
 {% endif %}

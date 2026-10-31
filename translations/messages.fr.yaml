@@ -5,3 +5,15 @@ tmonier_sylius_b2b_sales_copilot:
         placeholder: Interrogez-moi sur votre panier, les produits...
         send: Envoyer
         view_cart: Voir mon panier
+        empty_state: Choisissez une suggestion ou posez votre question.
+        loading: Réponse en cours
+        demo_notice: Réponses enregistrées en démo — ce widget simule un copilote IA sans appeler d'API externe.
+        fallback_title: Scénario non enregistré en démo
+        fallback_message: Les réponses disponibles portent sur l'état du panier, les dernières commandes et les produits du catalogue. Essayez une suggestion ci-dessous.
+        error_title: Erreur
+        error_message: Une erreur est survenue lors du traitement de votre demande. Veuillez réessayer ou choisir une autre question.
+        suggestion_cart: état de mon panier
+        suggestion_orders: mes dernières commandes
+        suggestion_stock: quels produits en stock ?
+        suggestion_reorder: recommande comme le mois dernier
+        suggestion_reorder_sub: recommande avec substitution

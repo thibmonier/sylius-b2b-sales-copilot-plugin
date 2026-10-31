@@ -5,3 +5,15 @@ tmonier_sylius_b2b_sales_copilot:
         placeholder: Ask me about your cart, products...
         send: Send
         view_cart: View my cart
+        empty_state: Pick a suggestion or type your question.
+        loading: Generating response
+        demo_notice: Pre-recorded responses — this widget simulates an AI copilot without calling any external API.
+        fallback_title: Scenario not recorded
+        fallback_message: Available responses cover cart status, recent orders and catalogue products. Try a suggestion below.
+        error_title: Error
+        error_message: An error occurred while processing your request. Please try again or pick another question.
+        suggestion_cart: what's in my cart
+        suggestion_orders: my recent orders
+        suggestion_stock: which products are in stock?
+        suggestion_reorder: reorder like last month
+        suggestion_reorder_sub: reorder with substitution
