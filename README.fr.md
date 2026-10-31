@@ -71,6 +71,12 @@ Les réponses enregistrées sont dans `config/cassettes.jsonl` (JSONL, une deman
 
 Un client connecté sur un canal activé voit le widget du copilote dans le tableau de bord de son compte et peut envoyer une demande. Une demande enregistrée (par exemple « état de mon panier ») renvoie sa réponse enregistrée.
 
+Le widget est accroché à `sylius_shop.account.dashboard.index.content.main.section`. Un thème qui remplace le tableau de bord peut l'inclure directement : `{% include '@TmonierSyliusB2bSalesCopilotPlugin/account/copilot_widget.html.twig' %}` (il n'affiche rien en dehors des canaux activés).
+
+## Captures d'écran
+
+![Le widget dans le tableau de bord du compte, après une demande enregistrée](docs/images/shop-copilot-widget-fr.jpg)
+
 ## Développement
 
 ### Lancer les tests
