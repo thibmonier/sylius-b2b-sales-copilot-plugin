@@ -22,8 +22,8 @@ final readonly class GuardedCopilotModel implements CopilotModelInterface
 
     public function chat(string $userMessage, array $context): CopilotResponse
     {
-        $memberId = $context['member_id'] ?? 'unknown';
-        assert(is_string($memberId));
+        $raw = $context['member_id'] ?? 'unknown';
+        $memberId = \is_string($raw) || \is_int($raw) ? (string) $raw : 'unknown';
 
         if (!$this->rateLimiter->isAllowed($memberId)) {
             return new CopilotResponse('Rate limit exceeded. Please try again later.', []);
