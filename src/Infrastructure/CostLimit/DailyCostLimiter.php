@@ -26,8 +26,8 @@ final class DailyCostLimiter
     {
         $key = $this->cacheKey();
 
+        /** @var int $current */
         $current = $this->cache->get($key, static fn () => 0);
-        assert(is_int($current));
 
         $this->cache->delete($key);
         $this->cache->get($key, static fn () => $current + $cents);

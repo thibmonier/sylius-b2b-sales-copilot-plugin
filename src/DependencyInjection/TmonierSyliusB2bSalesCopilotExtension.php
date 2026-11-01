@@ -36,17 +36,17 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
         assert(is_int($dailyLimit));
         $container->setParameter('tmonier_sylius_b2b_sales_copilot.daily_limit', $dailyLimit);
 
-        $ai = $config['ai'] ?? [];
-        assert(is_array($ai));
-        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.enabled', $ai['enabled'] ?? false);
-        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.model', $ai['model'] ?? 'claude-sonnet-4-5');
-        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.system_prompt', $ai['system_prompt'] ?? '');
-        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.daily_cost_limit_cents', $ai['daily_cost_limit_cents'] ?? 0);
+        /** @var array{enabled: bool, model: string, system_prompt: string, daily_cost_limit_cents: int} $ai */
+        $ai = $config['ai'];
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.enabled', (bool) $ai['enabled']);
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.model', (string) $ai['model']);
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.system_prompt', (string) $ai['system_prompt']);
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.daily_cost_limit_cents', (int) $ai['daily_cost_limit_cents']);
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.php');
 
-        if ($ai['enabled'] ?? false) {
+        if ($ai['enabled']) {
             $container->getDefinition(GuardedCopilotModel::class)
                 ->replaceArgument('$decorated', new Reference(FallbackCopilotAdapter::class));
         }
@@ -56,6 +56,8 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
     {
         $this->prependDoctrineMigrations($container);
         $this->prependTwigHooks($container);
+        $this->prependRateLimiter($container);
+        $this->prependMonolog($container);
     }
 
     private function prependTwigHooks(ContainerBuilder $container): void
@@ -73,6 +75,45 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
                         'template' => '@TmonierSyliusB2bSalesCopilotPlugin/account/copilot_widget.html.twig',
                         'priority' => -100,
                     ],
+                ],
+            ],
+        ]);
+    }
+
+    private function prependRateLimiter(ContainerBuilder $container): void
+    {
+        if (!$container->hasExtension('framework')) {
+            return;
+        }
+
+        $configs = $container->getExtensionConfig($this->getAlias());
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        $container->prependExtensionConfig('framework', [
+            'rate_limiter' => [
+                'copilot_requests' => [
+                    'policy' => 'fixed_window',
+                    'limit' => $config['daily_limit'],
+                    'interval' => '1 day',
+                ],
+            ],
+        ]);
+    }
+
+    private function prependMonolog(ContainerBuilder $container): void
+    {
+        if (!$container->hasExtension('monolog')) {
+            return;
+        }
+
+        $container->prependExtensionConfig('monolog', [
+            'channels' => ['copilot_audit'],
+            'handlers' => [
+                'copilot_audit' => [
+                    'type' => 'stream',
+                    'path' => '%kernel.logs_dir%/copilot_audit.log',
+                    'level' => 'info',
+                    'channels' => ['copilot_audit'],
                 ],
             ],
         ]);

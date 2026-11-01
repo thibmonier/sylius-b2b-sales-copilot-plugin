@@ -9,13 +9,13 @@ use Symfony\AI\Platform\Message\MessageBag;
 use Symfony\AI\Platform\Message\SystemMessage;
 use Symfony\AI\Platform\Message\UserMessage;
 use Symfony\AI\Platform\PlatformInterface;
-use Symfony\AI\Platform\Result\ToolCall as AiToolCall;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\CopilotModelInterface;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\CopilotResponse;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\ToolCall;
 
 final readonly class SymfonyAiCopilotAdapter implements CopilotModelInterface
 {
+    /** @param non-empty-string $model */
     public function __construct(
         private PlatformInterface $platform,
         private string $model,
@@ -43,7 +43,6 @@ final readonly class SymfonyAiCopilotAdapter implements CopilotModelInterface
         try {
             $aiToolCalls = $deferred->asToolCalls();
             foreach ($aiToolCalls as $aiTool) {
-                assert($aiTool instanceof AiToolCall);
                 $tools[] = new ToolCall(
                     $aiTool->getName(),
                     $aiTool->getArguments(),
