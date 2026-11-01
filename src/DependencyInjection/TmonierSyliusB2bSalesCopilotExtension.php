@@ -25,6 +25,14 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
         assert(is_array($enabledChannels));
         $container->setParameter('tmonier_sylius_b2b_sales_copilot.enabled_channels', $enabledChannels);
 
+        $toolWhitelist = $config['tool_whitelist'] ?? [];
+        assert(is_array($toolWhitelist));
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.tool_whitelist', $toolWhitelist);
+
+        $dailyLimit = $config['daily_limit'] ?? 50;
+        assert(is_int($dailyLimit));
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.daily_limit', $dailyLimit);
+
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.php');
     }

@@ -54,7 +54,12 @@ final class CopilotChatController
             return new JsonResponse(['error' => 'Invalid request'], Response::HTTP_BAD_REQUEST);
         }
 
-        $response = $this->copilotModel->chat($data['message'], []);
+        $context = [
+            'member_id' => $customer->getId() ?? 'unknown',
+            'member_scopes' => ['b2b:read', 'b2b:cart'],
+        ];
+
+        $response = $this->copilotModel->chat($data['message'], $context);
 
         return new JsonResponse([
             'message' => $response->message,

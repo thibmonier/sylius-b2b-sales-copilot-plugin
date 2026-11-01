@@ -12,6 +12,12 @@ Conversational purchasing assistant skeleton for Sylius 2 B2B: a widget in the c
 - **Conversational widget** in the customer account dashboard (Stimulus, keyboard accessible, answers announced by a live region)
 - **Replay mode**: recorded requests return their recorded answer; any other request returns « scénario non enregistré en démo »
 - **Access guard**: the chat endpoint refuses anonymous visitors (401) and channels outside `enabled_channels` (403); the widget is only rendered on enabled channels
+- **Functional guardrails**:
+  - **Tool whitelist**: only approved tools can be called
+  - **Scope-based authorization**: read tools require `b2b:read` scope, modification tools require `b2b:cart` scope
+  - **Rate limiting**: maximum requests per member per day (configurable, default 50)
+  - **Audit logging**: all tool executions are logged to a dedicated channel
+  - **Automatic refusal**: checkout and payment operations are refused by design (security)
 
 Natural-language actions on the store (reorder, quick add, quotes) through MCP tools are planned for a later version.
 
@@ -57,9 +63,25 @@ List the channels where the copilot is available (B2B channels):
 # config/packages/tmonier_sylius_b2b_sales_copilot.yaml
 tmonier_sylius_b2b_sales_copilot:
     enabled_channels: ['B2B_WEB']
+    
+    # Optional: tool whitelist (default includes safe tools)
+    tool_whitelist:
+        - view_cart
+        - get_cart
+        - search_products
+        - list_my_orders
+        - add_to_cart
+        - remove_from_cart
+        - update_cart_quantity
+        - reorder
+    
+    # Optional: rate limit per member per day (default: 50)
+    daily_limit: 50
 ```
 
 Recorded answers live in `config/cassettes.jsonl` (JSONL, one recorded request per line).
+
+Audit logs are written to `var/log/copilot_audit.log`.
 
 ### Example cassette
 
