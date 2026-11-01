@@ -1,18 +1,3 @@
-# Plugin configuration (imported by TestApplication)
-
-framework:
-    rate_limiter:
-        copilot_requests:
-            policy: 'fixed_window'
-            limit: '%tmonier_sylius_b2b_sales_copilot.daily_limit%'
-            interval: '1 day'
-
-monolog:
-    channels:
-        - copilot_audit
-    handlers:
-        copilot_audit:
-            type: stream
-            path: '%kernel.logs_dir%/copilot_audit.log'
-            level: info
-            channels: [copilot_audit]
+# Rate-limiter and monolog configuration are handled programmatically
+# in TmonierSyliusB2bSalesCopilotExtension::prepend().
+# This file is kept for backward compatibility with test applications that import it.
