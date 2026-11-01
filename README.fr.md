@@ -12,6 +12,12 @@ Squelette d'assistant d'achat conversationnel pour Sylius 2 B2B : un widget dans
 - **Widget conversationnel** dans le tableau de bord du compte client (Stimulus, utilisable au clavier, réponses annoncées par une région live)
 - **Mode rejoué** : une demande enregistrée renvoie sa réponse enregistrée ; toute autre demande renvoie « scénario non enregistré en démo »
 - **Garde d'accès** : l'API du chat refuse les visiteurs anonymes (401) et les canaux absents de `enabled_channels` (403) ; le widget ne s'affiche que sur les canaux activés
+- **Garde-fous fonctionnels** :
+  - **Liste blanche d'outils** : seuls les outils approuvés peuvent être appelés
+  - **Autorisation par portée** : les outils de lecture requièrent `b2b:read`, les modifications `b2b:cart`
+  - **Limitation de débit** : nombre maximal de requêtes par membre par jour (configurable, défaut 50)
+  - **Journal d'audit** : toutes les exécutions d'outils sont tracées dans un canal dédié
+  - **Refus automatique** : les opérations de commande et de paiement sont refusées par conception
 
 Les actions en langage naturel sur la boutique (recommande, ajout rapide, devis) via des outils MCP sont prévues pour une version ultérieure.
 
@@ -60,6 +66,28 @@ tmonier_sylius_b2b_sales_copilot:
 ```
 
 Les réponses enregistrées sont dans `config/cassettes.jsonl` (JSONL, une demande enregistrée par ligne).
+
+Les journaux d'audit sont écrits dans `var/log/copilot_audit.log`.
+
+### Intégration LLM (optionnelle)
+
+Le plugin peut appeler un vrai LLM via [Symfony AI Platform](https://github.com/symfony/ai). En cas d'indisponibilité du LLM, le plugin bascule automatiquement en mode rejoué.
+
+```bash
+composer require symfony/ai-platform symfony/ai-anthropic
+```
+
+```yaml
+tmonier_sylius_b2b_sales_copilot:
+    ai:
+        enabled: true
+        model: 'claude-sonnet-4-5'
+        daily_cost_limit_cents: 500  # 0 = illimité
+```
+
+Configurez votre clé API via variable d'environnement comme documenté par Symfony AI.
+
+Quand `ai.enabled` est `false` (défaut), seul l'adaptateur rejoué est utilisé — aucune dépendance LLM n'est nécessaire.
 
 ### Exemple de cassette
 

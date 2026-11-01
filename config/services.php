@@ -10,7 +10,10 @@ use Tmonier\SyliusB2bSalesCopilotPlugin\Audit\CopilotAuditLogger;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Controller\CopilotChatController;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Guard\CopilotScopeGuard;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Guard\ToolWhitelist;
+use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\CostLimit\DailyCostLimiter;
+use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\Fallback\FallbackCopilotAdapter;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\Replay\ReplayCopilotAdapter;
+use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\SymfonyAi\SymfonyAiCopilotAdapter;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\CopilotModelInterface;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Model\GuardedCopilotModel;
 use Tmonier\SyliusB2bSalesCopilotPlugin\RateLimit\CopilotRateLimiter;
@@ -39,6 +42,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CopilotRateLimiter::class)
         ->arg('$copilotLimiter', service('limiter.copilot_requests'));
+
+    $services->set(DailyCostLimiter::class)
+        ->arg('$cache', service('cache.app'))
+        ->arg('$dailyLimitCents', param('tmonier_sylius_b2b_sales_copilot.ai.daily_cost_limit_cents'));
+
+    $services->set(SymfonyAiCopilotAdapter::class)
+        ->arg('$platform', service('symfony_ai.platform')->nullOnInvalid())
+        ->arg('$model', param('tmonier_sylius_b2b_sales_copilot.ai.model'))
+        ->arg('$systemPrompt', param('tmonier_sylius_b2b_sales_copilot.ai.system_prompt'));
+
+    $services->set(FallbackCopilotAdapter::class)
+        ->arg('$realAdapter', service(SymfonyAiCopilotAdapter::class))
+        ->arg('$replayAdapter', service(ReplayCopilotAdapter::class))
+        ->arg('$logger', service(LoggerInterface::class));
 
     $services->set(GuardedCopilotModel::class)
         ->arg('$decorated', service(ReplayCopilotAdapter::class))

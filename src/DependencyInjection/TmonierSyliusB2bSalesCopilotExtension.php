@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\Fallback\FallbackCopilotAdapter;
+use Tmonier\SyliusB2bSalesCopilotPlugin\Model\GuardedCopilotModel;
 
 final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements PrependExtensionInterface
 {
@@ -33,8 +36,20 @@ final class TmonierSyliusB2bSalesCopilotExtension extends Extension implements P
         assert(is_int($dailyLimit));
         $container->setParameter('tmonier_sylius_b2b_sales_copilot.daily_limit', $dailyLimit);
 
+        $ai = $config['ai'] ?? [];
+        assert(is_array($ai));
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.enabled', $ai['enabled'] ?? false);
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.model', $ai['model'] ?? 'claude-sonnet-4-5');
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.system_prompt', $ai['system_prompt'] ?? '');
+        $container->setParameter('tmonier_sylius_b2b_sales_copilot.ai.daily_cost_limit_cents', $ai['daily_cost_limit_cents'] ?? 0);
+
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.php');
+
+        if ($ai['enabled'] ?? false) {
+            $container->getDefinition(GuardedCopilotModel::class)
+                ->replaceArgument('$decorated', new Reference(FallbackCopilotAdapter::class));
+        }
     }
 
     public function prepend(ContainerBuilder $container): void

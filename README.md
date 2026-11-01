@@ -83,6 +83,26 @@ Recorded answers live in `config/cassettes.jsonl` (JSONL, one recorded request p
 
 Audit logs are written to `var/log/copilot_audit.log`.
 
+### LLM integration (optional)
+
+The plugin can call a real LLM via [Symfony AI Platform](https://github.com/symfony/ai). When the LLM is unavailable, the plugin falls back to replay mode transparently.
+
+```bash
+composer require symfony/ai-platform symfony/ai-anthropic
+```
+
+```yaml
+tmonier_sylius_b2b_sales_copilot:
+    ai:
+        enabled: true
+        model: 'claude-sonnet-4-5'
+        daily_cost_limit_cents: 500  # 0 = unlimited
+```
+
+Set your API key via environment variable as documented by Symfony AI.
+
+When `ai.enabled` is `false` (default), only the replay adapter is used — no LLM dependency is needed.
+
 ### Example cassette
 
 ```jsonl
