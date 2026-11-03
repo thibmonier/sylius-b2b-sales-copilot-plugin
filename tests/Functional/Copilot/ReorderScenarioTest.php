@@ -13,6 +13,7 @@ final class ReorderScenarioTest extends WebTestCase
     public function testReorderLastMonthScenarioReturnsRecordedResponseInFrench(): void
     {
         $client = static::createClient();
+        $this->enableLocaleOnDefaultChannel('fr_FR');
         $this->logInNewShopUser($client);
 
         // Test scénario: "recommande comme le mois dernier" (FR)
@@ -67,6 +68,7 @@ final class ReorderScenarioTest extends WebTestCase
     public function testReorderWithSubstitutionScenarioReturnsPartialResultInFrench(): void
     {
         $client = static::createClient();
+        $this->enableLocaleOnDefaultChannel('fr_FR');
         $this->logInNewShopUser($client);
 
         // Test scénario: "recommande avec substitution" (FR)
