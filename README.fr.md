@@ -89,6 +89,12 @@ Configurez votre clé API via variable d'environnement comme documenté par Symf
 
 Quand `ai.enabled` est `false` (défaut), seul l'adaptateur rejoué est utilisé — aucune dépendance LLM n'est nécessaire.
 
+#### Version de Symfony AI supportée et chemin vers la 1.0
+
+Le plugin est testé avec **`symfony/ai-platform` `^0.15`** (une seule mineure à la fois : Symfony AI est avant 1.0 et chaque mineure peut casser son API, la contrainte n'est donc jamais un intervalle mélangeant des API incompatibles).
+
+Tout le code Symfony AI tient dans un seul fichier, `src/Infrastructure/SymfonyAi/SymfonyAiCopilotAdapter.php` ; le reste du plugin ne connaît que le port `CopilotModelInterface`. Un test d'architecture (`tests/Unit/Architecture/SymfonyAiConfinementTest.php`) échoue si une classe `Symfony\AI\*` est référencée ailleurs. Pour passer à la 1.0 : monter la contrainte et adapter cet adaptateur ; `tests/Unit/Infrastructure/SymfonyAi/SymfonyAiCopilotAdapterContractTest.php` dit exactement ce qui casse.
+
 ### Exemple de cassette
 
 ```jsonl

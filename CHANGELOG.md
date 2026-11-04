@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- Symfony AI: `symfony/ai-platform` `^0.14` to `^0.15`; port contract test and architecture test confining Symfony AI to `src/Infrastructure/SymfonyAi/` (US-269)
+
 ## [1.2.0] - 2026-10-31
 
 ### Added
