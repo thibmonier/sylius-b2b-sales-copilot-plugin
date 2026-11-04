@@ -103,6 +103,12 @@ Set your API key via environment variable as documented by Symfony AI.
 
 When `ai.enabled` is `false` (default), only the replay adapter is used — no LLM dependency is needed.
 
+#### Supported Symfony AI version and path to 1.0
+
+The plugin is tested against **`symfony/ai-platform` `^0.15`** (a single minor at a time: Symfony AI is pre-1.0 and every minor may break its API, so the constraint is never a range mixing incompatible APIs).
+
+All Symfony AI code lives in one file, `src/Infrastructure/SymfonyAi/SymfonyAiCopilotAdapter.php`; the rest of the plugin only knows the `CopilotModelInterface` port. An architecture test (`tests/Unit/Architecture/SymfonyAiConfinementTest.php`) fails if a `Symfony\AI\*` class is referenced anywhere else. To move to 1.0, bump the constraint and adapt that adapter: `tests/Unit/Infrastructure/SymfonyAi/SymfonyAiCopilotAdapterContractTest.php` tells exactly what breaks.
+
 ### Example cassette
 
 ```jsonl
