@@ -624,4 +624,165 @@ final class ReplayCopilotAdapterTest extends TestCase
         self::assertStringContainsString('Invalid quantity', $response->message);
         self::assertEmpty($response->tools);
     }
+
+    public function testMissingCassetteFileYieldsTheNoScenarioMessageInEnglish(): void
+    {
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('show me my cart', []);
+
+        self::assertSame('Scenario not recorded in demo. Please try again with a known request.', $response->message);
+        self::assertSame([], $response->tools);
+    }
+
+    public function testMissingCassetteFileYieldsTheNoScenarioMessageInFrench(): void
+    {
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('montre mon panier', []);
+
+        self::assertSame('Scénario non enregistré en démo. Veuillez réessayer avec une demande connue.', $response->message);
+    }
+
+    public function testMalformedJsonLineStopsTheLoadingWithAnException(): void
+    {
+        file_put_contents($this->tempCassettePath, "{not json}\n");
+
+        $this->expectException(\JsonException::class);
+
+        new ReplayCopilotAdapter($this->tempCassettePath);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>}>
+     */
+    public static function invalidCassetteProvider(): iterable
+    {
+        yield 'scalar line' => [['skip' => true]];
+        yield 'missing response' => [['intent' => 'invalid one', 'tools' => []]];
+        yield 'intent is not a string' => [['intent' => 42, 'response' => 'r', 'tools' => []]];
+        yield 'response is not a string' => [['intent' => 'invalid one', 'response' => ['r'], 'tools' => []]];
+        yield 'tools is not a list' => [['intent' => 'invalid one', 'response' => 'r', 'tools' => 'reorder']];
+    }
+
+    /**
+     * @param array<string, mixed> $invalidCassette
+     *
+     * @dataProvider invalidCassetteProvider
+     */
+    public function testInvalidCassetteLinesAreSkippedAndValidOnesStillLoad(array $invalidCassette): void
+    {
+        file_put_contents(
+            $this->tempCassettePath,
+            json_encode($invalidCassette) . "\n"
+            . json_encode(['intent' => 'valid one', 'response' => 'Valid answer', 'tools' => []]) . "\n",
+        );
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        self::assertSame('Valid answer', $adapter->chat('valid one', [])->message);
+        self::assertStringNotContainsString('invalid one', $adapter->chat('another request', [])->message);
+    }
+
+    public function testNonStringAliasesAreIgnoredAndStringAliasesStillMatch(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'show cart',
+            'aliases' => [42, 'display basket'],
+            'response' => 'Cart content',
+            'tools' => [],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        self::assertSame('Cart content', $adapter->chat('display basket', [])->message);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>}>
+     */
+    public static function invalidToolProvider(): iterable
+    {
+        yield 'tool is not an object' => ['reorder'];
+        yield 'missing result' => [['name' => 'reorder', 'args' => []]];
+        yield 'name is not a string' => [['name' => 7, 'args' => [], 'result' => 'success']];
+        yield 'args is not an object' => [['name' => 'reorder', 'args' => 'x', 'result' => 'success']];
+        yield 'result is neither a string nor an object' => [['name' => 'reorder', 'args' => [], 'result' => 12]];
+    }
+
+    /**
+     * @dataProvider invalidToolProvider
+     */
+    public function testInvalidToolsAreDroppedFromTheCassette(mixed $invalidTool): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'reorder it',
+            'response' => 'Done',
+            'tools' => [
+                $invalidTool,
+                ['name' => 'get_cart', 'args' => [], 'result' => ['items' => 1]],
+            ],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('reorder it', []);
+
+        self::assertCount(1, $response->tools);
+        self::assertSame('get_cart', $response->tools[0]->name);
+        self::assertSame(['items' => 1], $response->tools[0]->result);
+    }
+
+    public function testRequestMadeOfStopWordsOnlyGetsTheFallbackWithoutKeywordMatching(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'show cart',
+            'response' => 'Cart content',
+            'tools' => [],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('ok', []);
+
+        self::assertSame("Scenario not recorded in demo.\n\nAvailable scenarios:\n- show cart", $response->message);
+    }
+
+    public function testFrenchRequestWithOnlyEnglishScenariosGetsTheGenericFrenchMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'show cart',
+            'response' => 'Cart content',
+            'tools' => [],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('mon panier svp', []);
+
+        self::assertSame('Scénario non enregistré en démo. Veuillez réessayer avec une demande connue.', $response->message);
+    }
+
+    public function testEnglishRequestWithOnlyFrenchScenariosGetsTheGenericEnglishMessage(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'montre mon panier',
+            'response' => 'Contenu du panier',
+            'tools' => [],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('zzz yyy', []);
+
+        self::assertSame('Scenario not recorded in demo. Please try again with a known request.', $response->message);
+    }
+
+    public function testSingleSharedKeywordIsNotEnoughToMatchAScenario(): void
+    {
+        file_put_contents($this->tempCassettePath, json_encode([
+            'intent' => 'show cart',
+            'response' => 'Cart content',
+            'tools' => [],
+        ]) . "\n");
+        $adapter = new ReplayCopilotAdapter($this->tempCassettePath);
+
+        $response = $adapter->chat('show prices', []);
+
+        self::assertStringStartsWith('Scenario not recorded in demo.', $response->message);
+    }
 }

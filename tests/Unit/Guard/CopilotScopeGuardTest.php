@@ -95,4 +95,12 @@ final class CopilotScopeGuardTest extends TestCase
 
         self::assertTrue($this->guard->canExecuteTool($unknownTool, $context));
     }
+
+    public function testDeniesEveryToolWhenScopesAreNotAList(): void
+    {
+        $context = ['member_scopes' => 'b2b:read'];
+
+        self::assertFalse($this->guard->canExecuteTool(new ToolCall('view_cart', [], 'result'), $context));
+        self::assertFalse($this->guard->canExecuteTool(new ToolCall('unknown_tool_name', [], 'result'), $context));
+    }
 }
