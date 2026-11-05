@@ -7,15 +7,15 @@ namespace Tests\Tmonier\SyliusB2bSalesCopilotPlugin\Unit\Infrastructure\SymfonyA
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Result\ToolCall as AiToolCall;
 use Symfony\AI\Platform\Result\ToolCallResult;
-use Symfony\AI\Platform\Test\InMemoryPlatform;
+use Symfony\AI\Platform\Test\MockPlatformFactory;
 use Tmonier\SyliusB2bSalesCopilotPlugin\Infrastructure\SymfonyAi\SymfonyAiCopilotAdapter;
 
-/** Uses the in-memory platform shipped with Symfony AI: no network, no real LLM. */
+/** Uses the mock platform shipped with Symfony AI (MockPlatformFactory): no network, no real LLM. */
 final class SymfonyAiCopilotAdapterResultTypesTest extends TestCase
 {
     public function testToolCallsOfThePlatformAreMappedToPendingCopilotToolCalls(): void
     {
-        $platform = new InMemoryPlatform(static fn () => new ToolCallResult([
+        $platform = MockPlatformFactory::createPlatform(static fn () => new ToolCallResult([
             new AiToolCall('call-1', 'search_products', ['query' => 'gants']),
             new AiToolCall('call-2', 'add_to_cart', ['sku' => 'G-001', 'quantity' => 3]),
         ]));
@@ -34,7 +34,7 @@ final class SymfonyAiCopilotAdapterResultTypesTest extends TestCase
 
     public function testEmptyTextAnswerIsReplacedByAPlaceholderMessage(): void
     {
-        $adapter = new SymfonyAiCopilotAdapter(new InMemoryPlatform(''), 'claude-sonnet-4-5', 'prompt');
+        $adapter = new SymfonyAiCopilotAdapter(MockPlatformFactory::createPlatform(''), 'claude-sonnet-4-5', 'prompt');
 
         $response = $adapter->chat('bonjour', []);
 
@@ -44,7 +44,7 @@ final class SymfonyAiCopilotAdapterResultTypesTest extends TestCase
 
     public function testTextAnswerCarriesNoToolCall(): void
     {
-        $adapter = new SymfonyAiCopilotAdapter(new InMemoryPlatform('Bonjour'), 'claude-sonnet-4-5', 'prompt');
+        $adapter = new SymfonyAiCopilotAdapter(MockPlatformFactory::createPlatform('Bonjour'), 'claude-sonnet-4-5', 'prompt');
 
         $response = $adapter->chat('bonjour', []);
 
